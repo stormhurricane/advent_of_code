@@ -2,9 +2,9 @@ import re
 
 def create_sign_dict(array: list) -> dict:
     sign_dict = {}
-    for r, row in enumerate(array):
-        for c, char in enumerate(row):
-            if char not in "1234567890.":
+    for r in range(len((array))):
+        for c in range(len(array[r])):
+            if array[r][c] not in "1234567890.":
                 sign_dict[(r, c)] = []
     return sign_dict
          
