@@ -2,6 +2,11 @@
 
 [![Completion Status](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/stormhurricane/advent_of_code/main/.github/badges/completion2023.json)](https://github.com/stormhurricane/advent_of_code)
 
+![Relative date](https://img.shields.io/date/1703477160?style=flat-square&label=Deadline)
+
+
+
+
 ---
 
 Something is wrong with global snow production, and you've been selected to  
