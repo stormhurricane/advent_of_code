@@ -1,46 +1,43 @@
 import re
 
-def define_signs(file_path: str) -> set:
-    with open(file_path, "r") as f:
-        return {char for char in set(f.read()) if not char.isalnum() and char not in {".", "\n"}}
-
-
-def check_position(x_low, x_high, row, lines, signs):
-    row_value = max(0, row - 1)
-    x_start = max(0, x_low - 1)
-
-    relevant_lines = lines[row_value:row + 2]
-    relevant_chars = (char for line in relevant_lines for char in line[x_start:x_high + 1])
-
-    return any(char in signs for char in relevant_chars)
-
-            
+def create_sign_dict(array: list) -> dict:
+    sign_dict = {}
+    for r, row in enumerate(array):
+        for c, char in enumerate(row):
+            if char not in "1234567890.":
+                sign_dict[(r, c)] = []
+    return sign_dict
+         
 
 def main():
     file_path = "input.txt"
-    lines = []
+    schematic = []
 
-    with open(file_path, "r") as f:
-        lines = [line.rstrip() for line in f]
+    with open(file_path, "r") as file:
+        schematic = [line.rstrip() for line in file]
 
-    signs = define_signs(file_path)
     total_sum = 0
-    num_list = []
+    product_sum = 0
 
-    for i, row in enumerate(lines):
-        for m in re.finditer(r"\d+", row):
-            if check_position(m.start(), m.end(), i, lines, signs):
-                total_sum += int(m.group(0))
-                num_list.append(int(m.group(0)))
+    sign_dict = create_sign_dict(schematic)
 
-    print(total_sum)
+    for i, row in enumerate(schematic):
+        for match in re.finditer(r"\d+", row):
+            
+            for r in (i-1, i, i+1):
+                for x in range(match.start()-1, match.end()+1):
+                    if (r, x) in sign_dict:
+                        sign_dict[(r, x)].append(int(match.group(0)))
 
-    print(signs)
+    for values in sign_dict.values():
+        total_sum = total_sum + sum(values)
+        if len(values) == 2:
+            product_sum = values[0] * values[1] + product_sum
 
-
+    print(f"Part 1 Solution:\t{total_sum}")
+    print(f"Part 2 Solution:\t{product_sum}")
 
 # First and last line have no symbols
 
 if __name__ == "__main__":
     main()
-    #print(board)
