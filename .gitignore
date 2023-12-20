@@ -1,0 +1,7 @@
+// C compiled files
+*.exe
+*.out
+*.o
+
+// input data
+input.txt
