@@ -3,5 +3,9 @@
 *.out
 *.o
 
+// python
+**/__pycache__/
+
+
 // input data
 input.txt
