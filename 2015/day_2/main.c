@@ -12,19 +12,22 @@ int main() {
     }
     
     int totalSqftOfWrappingPaper = 0;
+    int totalFeetOfRibbon = 0;
 
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
 
     char buffer[5];
-    int surfaceAreas[3];
+    int surfaceAreas[] = {0, 0, 0};
+    // w x l x h
+    int values[] = {0, 0, 0};
 
     // read input line by line
     while ((read = getLine(&line, &len, fp)) != -1 ) {
-        int length = 0;
-        int width = 0;
-        int height = 0;
+        values[0] = 0;
+        values[1] = 0;
+        values[2] = 0;
         int previousX = 0;
         int lineLength = (int) strlen(line);
         // iterate over each line
@@ -33,28 +36,41 @@ int main() {
             if (line[i] == 'x') {   
                 strncpy(buffer, line + previousX, i);
                 previousX = i+1;
-                if (!length) {
-                    length = atoi(buffer);
+                if (!values[0]) {
+                    values[0] = atoi(buffer);
                 }
                 else {
-                    width = atoi(buffer);
+                    values[1] = atoi(buffer);
                 }
             }
 
-            if (length && width) {
+            if (values[0] && values[1]) {
                 strncpy(buffer, line + previousX, lineLength);
-                height = atoi(buffer);
+                values[2] = atoi(buffer);
                 break;
             }
         }
 
-        surfaceAreas[0] = 2 * length * width;
-        surfaceAreas[1] = 2 * length * height;
-        surfaceAreas[2] = 2 * width * height;
+        // insertion sort algorithm, cause why not
+        for (unsigned int i =1; i < (sizeof(values)/ sizeof(values[0])); i++ ) {
+            int tmp = values[i];
+            int j = i -1;
+            while (j >= 0 && values[j] > tmp) {
+                values[j+1] = values[j];
+                j = j-1;
+            }
+            values[j+1] = tmp;
+        }
+
+        surfaceAreas[0] = 2 * values[0] * values[1];
+        surfaceAreas[1] = 2 * values[0] * values[2];
+        surfaceAreas[2] = 2 * values[1] * values[2];
+
         int minValue = -1;
         int sqftOfWrappingPaper = 0;
+        int feetOfRibbon = 0;
 
-        for (unsigned int i =0; i < (sizeof(surfaceAreas)/ sizeof(surfaceAreas[0])); i++ ) {
+        for (unsigned int i =0; i < 3; i++ ) {
             if (surfaceAreas[i] < minValue || minValue < 0) {
                 minValue = surfaceAreas[i];
             }
@@ -63,13 +79,18 @@ int main() {
         minValue = minValue / 2;
 
         sqftOfWrappingPaper += minValue;
+
+        feetOfRibbon = 2 * values[0] + 2 * values[1] + (values[0] * values[1] * values[2]);
+
         totalSqftOfWrappingPaper += sqftOfWrappingPaper;
+        totalFeetOfRibbon += feetOfRibbon;
 
         // Hallelujah for emptying buffers...
         memset(buffer,0,strlen(buffer));
     }
 
     printf("The elves need %d square feet of wrapping paper\n", totalSqftOfWrappingPaper);
+    printf("The elves need %d feet of ribbon\n", totalFeetOfRibbon);
 
     fclose(fp);
     free(line);
