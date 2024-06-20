@@ -6,3 +6,5 @@ input.txt
 
 # C
 *.exe
+*.out
+*.o
