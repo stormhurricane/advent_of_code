@@ -12,12 +12,14 @@ typedef struct List{
     Node *head, *tail;
 } List;
 
+// helper
 void printNode(Node *node) {
     printf("Node: (%p)\nx: %d\t\t y: %d\n", node, node->x_coordinate, node->y_coordinate);
     printf("Next: %p\t\tPrevious: %p\n\n", node->next, node->previous);
 }
 
-void addToList(List *list, Node *node) {
+
+void appendToList(List *list, Node *node) {
     if (!list || !node) return;
 
     if (list->length == 0) {
@@ -97,12 +99,13 @@ List* createList() {
     first->x_coordinate = 0;
     first->y_coordinate = 0;
 
-    addToList(newList, first);
+    appendToList(newList, first);
 
     return newList;
 }
 
-void makeListToSet(List *list) {
+// remove duplicates from list
+void removeDuplicates(List *list) {
     if (!list || list->length == 0) return;
     
     Node *current = list->head;
@@ -112,6 +115,7 @@ void makeListToSet(List *list) {
         while (next) {
             if (current->y_coordinate == next->y_coordinate 
                 && current->x_coordinate == next->x_coordinate) {
+
                 Node *afterNext = next->next;
                 removeFromList(list, next);
                 next = afterNext;
@@ -121,6 +125,33 @@ void makeListToSet(List *list) {
         }
         current = current->next;
     }
+}
+
+// naively add two lists together
+List* addListToList(List *listOne, List *listTwo) {
+    if (!listOne || listOne->length == 0) {
+        if (listTwo && listTwo->length > 0) 
+        return listTwo;
+    }
+
+    if (!listTwo || listTwo->length == 0) {
+        if (listOne && listOne->length > 0) 
+        return listOne;
+    }
+
+    if (!listOne && !listTwo) return NULL;
+ 
+    List *newList = malloc(sizeof(List));
+    
+    newList->head = listOne->head;
+    newList->tail = listTwo->tail;
+    
+    newList->length = listOne->length + listTwo->length;
+
+    listOne->tail->next = listTwo->head;
+    listTwo->head->previous = listOne->tail;
+
+    return newList;
 }
 
 int main() {
@@ -134,42 +165,80 @@ int main() {
     }
 
     char c;
-    List *list = createList();
+    int i = 0;
+    List *santaOnlyList = createList();
+    List *santaList = createList();
+    List *roboSantaList = createList();
 
     // check file, char by char
     do {
         c = fgetc(fp);
 
+        // two nodes, one for single santa and two santa lists
         Node *newNode = malloc(sizeof(Node));
-        newNode->x_coordinate = list->tail->x_coordinate;
-        newNode->y_coordinate = list->tail->y_coordinate;
+        Node *copyNode = malloc(sizeof(Node));
+        
+        // get the coordinates of the most recent
+        if (i % 2 == 0) {
+            newNode->x_coordinate = santaList->tail->x_coordinate;
+            newNode->y_coordinate = santaList->tail->y_coordinate;
+        }
+        else {
+            newNode->x_coordinate = roboSantaList->tail->x_coordinate;
+            newNode->y_coordinate = roboSantaList->tail->y_coordinate;
+        }
 
+        copyNode->x_coordinate = santaOnlyList->tail->x_coordinate;
+        copyNode->y_coordinate = santaOnlyList->tail->y_coordinate;
+
+        // increment necessary value;
         if (c == '^') {
             newNode->x_coordinate++;
+            copyNode->x_coordinate++;
         }
         else if (c == 'v') {
             newNode->x_coordinate--;
+            copyNode->x_coordinate--;
         }
         else if (c == '>') {
             newNode->y_coordinate++;
+            copyNode->y_coordinate++;
         }  
         else if (c == '<') { 
             // c == '<'
             newNode->y_coordinate--;
+            copyNode->y_coordinate--;
         }
         else {
             continue;
+            free(newNode);
+            free(copyNode);
         }
-        
-        addToList(list, newNode);
+
+        // add to respective lists
+        appendToList(santaOnlyList, copyNode);
+
+        if (i % 2 == 0){
+            appendToList(santaList, newNode);
+        }
+        else {
+            appendToList(roboSantaList, newNode);
+        }
+
+        i++;
     }
     while (c != EOF) ;
 
     fclose(fp);
 
-    makeListToSet(list);
+    removeDuplicates(santaOnlyList);
 
-    printf("Santa visits %d unique houses if alone", list->length);
+    List *completeList = addListToList(santaList, roboSantaList);
+    removeDuplicates(completeList);
+
+    printf("Santa visits %d unique houses alone\n", santaOnlyList->length);
+
+    printf("Santa and Robot Santa visit %d unique houses", completeList->length);
 
     return 0;
 }
