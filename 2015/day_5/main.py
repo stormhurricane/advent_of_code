@@ -1,4 +1,4 @@
-
+import time
 
 def part_one(input):
     disallowed_strings = ["ab", "cd", "pq", "xy"]
@@ -50,9 +50,13 @@ if __name__ == "__main__":
     with open("input.txt", "r") as f:
         input = f.read().split("\n")
 
+    start = time.time()
+
     old_nice_string_count = part_one(input)
     new_nice_string_count = part_two(input)
     
+    end = time.time()
 
     print(f"{old_nice_string_count} number of nice strings in the old counting")
     print(f"{new_nice_string_count} number of nice strings in the new counting")
+    print(f"Needed time: {end - start} seconds")

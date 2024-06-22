@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "line.h"
 
 int partOne(char *line) {
@@ -78,6 +79,8 @@ int main() {
         return 1;
     }
 
+    clock_t start = clock();
+
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -89,6 +92,10 @@ int main() {
         newNiceCount += partTwo(line);
     }
 
+    clock_t end = clock();
+
     printf("%d of nice strings in old counting\n", oldNiceCount);
     printf("%d of nice strings in new counting", newNiceCount);
+    float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+    printf("\nNeeded Time: %f seconds", seconds);
 }
