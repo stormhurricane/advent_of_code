@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "line.h"
 
 int main() {
@@ -11,6 +12,8 @@ int main() {
         return 1;
     }
     
+    clock_t start = clock();
+
     int totalSqftOfWrappingPaper = 0;
     int totalFeetOfRibbon = 0;
 
@@ -89,11 +92,15 @@ int main() {
         memset(buffer,0,strlen(buffer));
     }
 
-    printf("The elves need %d square feet of wrapping paper\n", totalSqftOfWrappingPaper);
-    printf("The elves need %d feet of ribbon\n", totalFeetOfRibbon);
+    clock_t end = clock();
 
     fclose(fp);
     free(line);
+
+    printf("The elves need %d square feet of wrapping paper\n", totalSqftOfWrappingPaper);
+    printf("The elves need %d feet of ribbon\n", totalFeetOfRibbon);
+    float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+    printf("\nNeeded Time: %f seconds", seconds);
 
     return 0;
 }

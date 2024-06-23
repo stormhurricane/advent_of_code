@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 typedef struct Node{
     int x_coordinate;
@@ -164,6 +165,8 @@ int main() {
         return 1;
     }
 
+    clock_t start = clock();
+
     char c;
     int i = 0;
     List *santaOnlyList = createList();
@@ -236,9 +239,12 @@ int main() {
     List *completeList = addListToList(santaList, roboSantaList);
     removeDuplicates(completeList);
 
-    printf("Santa visits %d unique houses alone\n", santaOnlyList->length);
+    clock_t end = clock();
 
+    printf("Santa visits %d unique houses alone\n", santaOnlyList->length);
     printf("Santa and Robot Santa visit %d unique houses", completeList->length);
+    float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+    printf("\nNeeded Time: %f seconds", seconds);
 
     return 0;
 }
