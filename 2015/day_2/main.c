@@ -36,7 +36,7 @@ int main() {
         // iterate over each line
         for (int i = 0; i < lineLength; i++) {
             // split line into single parts
-            if (line[i] == 'x') {   
+            if (line[i] == 'x') {
                 strncpy(buffer, line + previousX, i);
                 previousX = i+1;
                 if (!values[0]) {
@@ -65,6 +65,7 @@ int main() {
             values[j+1] = tmp;
         }
 
+        // formulas come from the description
         surfaceAreas[0] = 2 * values[0] * values[1];
         surfaceAreas[1] = 2 * values[0] * values[2];
         surfaceAreas[2] = 2 * values[1] * values[2];
@@ -73,6 +74,7 @@ int main() {
         int sqftOfWrappingPaper = 0;
         int feetOfRibbon = 0;
 
+        // find the minimal value as "slack"
         for (unsigned int i =0; i < 3; i++ ) {
             if (surfaceAreas[i] < minValue || minValue < 0) {
                 minValue = surfaceAreas[i];

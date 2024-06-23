@@ -9,6 +9,7 @@ if __name__ == "__main__":
 
     start = time.time()
     five_found = False
+    # this is just brute forcing the MD5 algorithm until I get the right hash value
     for i in count(1):
         combined = input + str(i)
         hash = md5(combined.encode("utf-8")).hexdigest()

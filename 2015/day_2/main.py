@@ -15,7 +15,9 @@ def main():
         if not line:
             continue
 
+        # split input into the measurements and SORT ascendingly
         int_measurement = sorted([int(x) for x in line.split('x')])
+        # calculation according to formulae
         surface_areas = [2 * int_measurement[0] * int_measurement[1], 2 * int_measurement[1] * int_measurement[2], 2 * int_measurement[0] * int_measurement[2]]
 
         sqft_of_wrapping_paper = sum(surface_areas) + int(min(surface_areas) / 2)

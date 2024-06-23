@@ -8,6 +8,10 @@ int partOne(char *line) {
     int vowelCounter = 0;
     int hasPair = 0;
 
+    // inspect each char in the line, and chheck the three rules
+    // vowelCounter has to be equal or more than 3
+    // needs a pair
+    // and none of the strings ab, cd, pq, xy
     for (int i = 0; i < strlen(line) - 1; i++ ) {
         switch(line[i]) {
             case 'a':
@@ -47,6 +51,8 @@ int partTwo(char *line) {
 
     int lineLength = strlen(line);
 
+    // inspects each char one by one, and checks the rules XyX
+    // and that a double char pair is existent
     for (int i = 0; i < lineLength; i++ ) {
         if (i+2 < lineLength && !ruleOfXyX) {
             if (line[i] == line[i+2]) {
