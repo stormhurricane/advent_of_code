@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct Node{
-    int data;
+    void *data;
     struct Node *next, *previous;
 } Node;
 
@@ -129,19 +129,19 @@ int main() {
     List* list = createList();
 
     Node *first = malloc(sizeof(Node));
-    first->data = 1;
+    first->data = (int*) 1;
     Node *second = malloc(sizeof(Node));
-    second->data = 2;
+    second->data = (int*) 2;
     Node *third = malloc(sizeof(Node));
-    third->data = 3;
+    third->data = (int*) 3;
     Node *fourth = malloc(sizeof(Node));
-    fourth->data = 1;
+    fourth->data = (int*) 1;
     Node *fifth = malloc(sizeof(Node));
-    fifth->data = 1;
+    fifth->data = (int*) 1;
     Node *sixth = malloc(sizeof(Node));
-    sixth->data = 2;
+    sixth->data = (int*) 2;
     Node *extra = malloc(sizeof(Node));
-    extra->data = 1;
+    extra->data = (int*) 1;
 
 
     appendToList(list, first);
