@@ -36,6 +36,8 @@ def create_dicts(input):
     wire_values = dict()
     
     for line in input:
+        if not line:
+            continue
         # find wire
         wire, instruction = line.split("->")[1].strip(), line.split("->")[0].strip()
 
