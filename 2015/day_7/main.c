@@ -3,9 +3,11 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
+#include <math.h>
 #include "line.h"
 #include "map.h"
 
+// globals because F
 HashTable *ht;
 HashTable *results;
 
@@ -20,18 +22,18 @@ int isnumber(char* str) {
 }
 
 uint16_t calculate(char* name) {
-    
+    // is the parameter a simple number?
     if (isnumber(name)) {
         uint16_t res =  (uint16_t) atoi(name);
         return res;
     }
 
+    // needed variable for working sanity check
     void* previousComputed = lookup(results, name);
-
     if (previousComputed) {
         return *((int*) previousComputed);
     }
-
+    // helper value, because we need pointers for the value of the map. So... 
     uint16_t result = 0;
 
     char* instruction = lookup(ht, name);
@@ -40,17 +42,20 @@ uint16_t calculate(char* name) {
         return 0;
     }
 
+    // is the instruction simply another wire?
     if (!strchr(instruction, ' ')) {
         result = calculate(instruction);
-        
+        // more.
         uint16_t *res = malloc(sizeof(uint16_t));
         *res = result;
         insert(results, name, res);
         return *res;
     }
 
+    // NOT instruction starts the string
     if (strncmp(instruction, "NOT", 3) == 0) {
         uint16_t help = calculate(strchr(instruction, ' ') + 1);
+        // XOR it with max value.
         result =  help ^ 0xffff;
         uint16_t *res = malloc(sizeof(uint16_t));
         *res = result;
@@ -58,9 +63,11 @@ uint16_t calculate(char* name) {
         return *res;
     }
 
+    // as we do not want to change the instruction value, we have to deep copy it...
     char *copy = malloc(strlen(instruction));
     strcpy(copy, instruction);
 
+    // other strings, and some manip
     char *keyword = strchr(copy, ' ') + 1;
     copy[keyword - copy - 1] = '\0';
     char *secondWire = strchr(keyword, ' ') + 1;
@@ -121,6 +128,7 @@ int main() {
         seperatorPtr += 3;
         seperatorPtr[strlen(seperatorPtr) - 1] = '\0';
 
+        // deep copies, because line is evil.
         char* value = malloc(strlen(line)+1);
         strcpy(value, line);
 
@@ -130,17 +138,24 @@ int main() {
 
     uint16_t old_a = calculate("a");
     HashTable *oldResults = results;
+    char* val = malloc((int)((ceil(log10(old_a))+1)*sizeof(char)));
+    sprintf(val, "%d", old_a);
 
-//    insert(ht, "b", &old_a);
-    // destroyTable(results);
-  //  results = createTable();
+    char* newValue = "b";
+    insert(ht, newValue, val);
+
+    HashTable * newResults = createTable();
+    results = newResults;
     uint16_t a = calculate("a");
 
     free(seperatorPtr);
     free(line);
     free(fp);
+    free(val);
+    free(newValue);
     destroyTable(ht);
-    destroyTable(results);
+    destroyTable(oldResults);
+    destroyTable(newResults);
 
     clock_t end_time = clock();
 

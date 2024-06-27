@@ -52,10 +52,10 @@ HashTable* createTable() {
     return table;
 }
 
-
+// frees all pointers, which may fuck shit up
 void destroyTable(HashTable *table) {
     for (size_t i = 0; i < table->capacity; i++) {
-        free((void*)table->entries[i].key);
+        free((void*) table->entries[i].key);
         free(table->entries->value);
     }
 
