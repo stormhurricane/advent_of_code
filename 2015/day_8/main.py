@@ -15,7 +15,7 @@ if __name__ == "__main__":
     total_number_of_string_characters = 0
     total_number_of_integral_characters = 0
 
-    for i, line in enumerate(input):
+    for line in input:
         if not line:
             continue
 
@@ -51,8 +51,8 @@ if __name__ == "__main__":
 
     end_time = time.time()
 
-    print(f"Difference is: {total_number_of_memory_characters - total_number_of_string_characters}")
-    print(f"Difference is: {total_number_of_integral_characters - total_number_of_memory_characters}")
+    print(f"Eval Difference is: {total_number_of_memory_characters - total_number_of_string_characters}")
+    print(f"Integration Difference is: {total_number_of_integral_characters - total_number_of_memory_characters}")
 
 
     print(f"Needed {end_time - start_time} seconds")
