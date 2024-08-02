@@ -23,6 +23,7 @@ Time is based on all variable instatiations and algorithms, **except** file acce
 |   11      | ~ 1,4997 s    |   X           |
 |   12      | ~ 3,728 ms    |   X           |
 |   13      | ~ 1,2026 s    |   X           |
+|   14      | ~ 4,681 ms    |   X           |
 
 
 [^1]: Day 4 is missing a C implementation, as the MD5 library would have to be imported or self made. And I'm not good enough. Yet.
