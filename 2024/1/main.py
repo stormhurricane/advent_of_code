@@ -28,8 +28,10 @@ def main(filename="input.txt"):
         distance = abs(pair[0] - pair[1])
         total_distance += distance
 
+    # similarity (part b)
     similarity_values = []
 
+    # for each ID count the occurences in the other list
     for location_id in left_list:
         occurences = 0
         for i in right_list:
@@ -45,7 +47,6 @@ def main(filename="input.txt"):
     for pair in zip(left_list, similarity_values):
         value = pair[0] * pair[1]
         similarity_score += value
-
 
     end_time = time.time()
 
